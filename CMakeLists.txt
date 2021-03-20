@@ -196,23 +196,27 @@ endforeach()
 install(
       TARGETS ${RUNTIME_TARGETS}
       RUNTIME
+      COMPONENT icommands
       DESTINATION /usr/bin
 )
 
 install(
       TARGETS ${API_LIBRARY_TARGETS}
       LIBRARY
+      COMPONENT server_modules
       DESTINATION /usr/lib/irods/plugins/api
 )
 
 install(
       TARGETS ${MSVC_LIBRARY_TARGETS}
       LIBRARY
+      COMPONENT server_modules
       DESTINATION /usr/lib/irods/plugins/microservices
 )
 
 install(
       DIRECTORY ${CMAKE_SOURCE_DIR}/microservices/rules/
+      COMPONENT server_modules
       DESTINATION /var/lib/irods/netcdf-plugin-tests
 )
 # --- CPack configuration ---
@@ -253,13 +257,16 @@ endif()
 set(CPACK_PACKAGE_FILE_NAME "irods-netcdf${IRODS_PLUGIN_PACKAGE_FILE_NAME_SUFFIX}")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY OFF)
-set(CPACK_COMPONENTS_GROUPING IGNORE)
+
+# -- dwm
+#set(CPACK_COMPONENTS_GROUPING IGNORE)
+
 set(CPACK_PACKAGE_VERSION ${IRODS_PLUGIN_VERSION})
 set(CPACK_PACKAGE_CONTACT "Renaissance Computing Institute <info@irods.org>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The integrated Rule-Oriented Data System")
 set(CPACK_PACKAGE_VENDOR "Renaissance Computing Institute <info@irods.org>")
 
-set(CPACK_DEB_COMPONENT_INSTALL OFF)
+set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_PACKAGE_SECTION "contrib/science")
 set(CPACK_DEBIAN_COMPRESSION_TYPE "gzip")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "extra")
@@ -269,7 +276,7 @@ set(CPACK_DEBIAN_PACKAGE_CONTROL_STRICT_PERMISSION ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/packaging/postinst;")
 
 
-set(CPACK_RPM_COMPONENT_INSTALL OFF)
+set(CPACK_RPM_COMPONENT_INSTALL ON ) # -- dwm
 set(CPACK_RPM_PACKAGE_RELEASE "1")
 set(CPACK_RPM_PACKAGE_LICENSE "BSD-3-Clause")
 set(CPACK_RPM_PACKAGE_VENDOR "iRODS Consortium")
@@ -283,6 +290,9 @@ set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 
 
 set(CPACK_DEBIAN_PACKAGE_NAME "irods-netcdf")
+
+set(CPACK_DEBIAN_SERVER_PART_PACKAGE_DEPENDS "irods-netcdf-client-part")
+
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "${IRODS_PACKAGE_DEPENDENCIES_STRING},
     irods-runtime (= ${IRODS_CPACK_DEBIAN_PACKAGE_VERSION}), libc6")
 
@@ -303,3 +313,11 @@ endif()
 
 
 include(CPack)
+
+cpack_add_component(
+	icommands
+)
+
+cpack_add_component(
+	server_modules
+)
