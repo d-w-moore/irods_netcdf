@@ -66,7 +66,8 @@ target_compile_definitions(server_netcdf_lib PRIVATE RODS_SERVER)
 
 #----------- initialize lists of install targets
 
-set(API_LIBRARY_TARGETS)
+set(API_LIBRARY_TARGETS_server)
+set(API_LIBRARY_TARGETS_client)
 set(MSVC_LIBRARY_TARGETS)
 set(RUNTIME_TARGETS)
 
@@ -92,8 +93,8 @@ foreach (src ${api_modules_src})
     strip_cpp("${stub_cpp}" stub)
     foreach(target client server)
         set(module_name "${stub}_${target}")
+        list(APPEND API_LIBRARY_TARGETS_${target} "${module_name}")
         add_library("${module_name}" MODULE ${src})
-        list(APPEND API_LIBRARY_TARGETS "${module_name}")
         target_link_libraries("${module_name}" PRIVATE 
                 irods_client
                 # irods_server # - note server binary provides this dependency
@@ -107,6 +108,7 @@ foreach (src ${api_modules_src})
         )
         if("${target}" STREQUAL "server")
             target_compile_definitions("${module_name}" PRIVATE RODS_SERVER)
+        else()
         endif()
     endforeach()
 endforeach()
@@ -201,9 +203,16 @@ install(
 )
 
 install(
-      TARGETS ${API_LIBRARY_TARGETS}
+      TARGETS ${API_LIBRARY_TARGETS_server}
       LIBRARY
       COMPONENT server_modules
+      DESTINATION /usr/lib/irods/plugins/api
+)
+
+install(
+      TARGETS ${API_LIBRARY_TARGETS_client}
+      LIBRARY
+      COMPONENT client_modules
       DESTINATION /usr/lib/irods/plugins/api
 )
 
@@ -316,8 +325,14 @@ include(CPack)
 
 cpack_add_component(
 	icommands
+        DEPENDS client_modules
 )
 
 cpack_add_component(
 	server_modules
+        DEPENDS client_modules
+)
+
+cpack_add_component(
+	client_modules
 )
