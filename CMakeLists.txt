@@ -325,7 +325,7 @@ if (IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "ubuntu")
     endif()
 endif()
 
-set(CPACK_RPM_PACKAGE_NAME "irods_netcdf")
+set(CPACK_RPM_PACKAGE_NAME "irods-netcdf")
 if (IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "centos" OR IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "centos linux")
   set(CPACK_RPM_PACKAGE_REQUIRES "${IRODS_PACKAGE_DEPENDENCIES_STRING}, irods-runtime = ${IRODS_VERSION}, hdf5, netcdf")
 elseif (IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "opensuse")
@@ -333,11 +333,28 @@ elseif (IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "opensuse")
 endif()
 
 
-set (CPACK_RPM_SERVER_MODULES_PACKAGE_REQUIRES "irods_netcdf-client_modules")
-set (CPACK_RPM_ICOMMANDS_PACKAGE_REQUIRES "irods_netcdf-client_modules")
+set (CPACK_RPM_SERVER_MODULES_PACKAGE_REQUIRES "irods-netcdf-client_modules")
+set (CPACK_RPM_ICOMMANDS_PACKAGE_REQUIRES "irods-netcdf-client_modules")
+
+
+
+foreach (component_name icommands server_modules client_modules)
+
+    set(PACKAGE_AND_COMPONENT "${CPACK_RPM_PACKAGE_NAME}-${component_name}")
+    set(VERSION_ETC "${IRODS_PLUGIN_VERSION}-${IRODS_LINUX_DISTRIBUTION_NAME}-${IRODS_LINUX_DISTRIBUTION_VERSION_MAJOR}-${CMAKE_SYSTEM_PROCESSOR}")
+
+    string(TOUPPER "${component_name}" CPACK_RPM_PACKAGE_NAME_TO_UPPER)
+    set(CPACK_RPM_${CPACK_RPM_PACKAGE_NAME_TO_UPPER}_FILE_NAME "${PACKAGE_AND_COMPONENT}-${VERSION_ETC}.rpm")
+
+    unset(PACKAGE_AND_COMPONENT)
+    unset(VERSION_ETC)
+    unset(CPACK_RPM_PACKAGE_NAME_TO_UPPER)
+
+endforeach()
 
 
 include(CPack)
+
 
 cpack_add_component(
 	icommands
@@ -350,3 +367,4 @@ cpack_add_component(
 cpack_add_component(
 	client_modules
 )
+
