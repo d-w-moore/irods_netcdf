@@ -336,6 +336,8 @@ endif()
 set (CPACK_RPM_SERVER_MODULES_PACKAGE_REQUIRES "irods-netcdf-client_modules")
 set (CPACK_RPM_ICOMMANDS_PACKAGE_REQUIRES "irods-netcdf-client_modules")
 
+set (CPACK_DEBIAN_SERVER_MODULES_PACKAGE_DEPENDS "irods-netcdf-client_modules")
+set (CPACK_DEBIAN_ICOMMANDS_PACKAGE_DEPENDS  "irods-netcdf-client_modules")
 
 
 foreach (component_name icommands server_modules client_modules)
@@ -343,12 +345,13 @@ foreach (component_name icommands server_modules client_modules)
     set(PACKAGE_AND_COMPONENT "${CPACK_RPM_PACKAGE_NAME}-${component_name}")
     set(VERSION_ETC "${IRODS_PLUGIN_VERSION}-${IRODS_LINUX_DISTRIBUTION_NAME}-${IRODS_LINUX_DISTRIBUTION_VERSION_MAJOR}-${CMAKE_SYSTEM_PROCESSOR}")
 
-    string(TOUPPER "${component_name}" CPACK_RPM_PACKAGE_NAME_TO_UPPER)
-    set(CPACK_RPM_${CPACK_RPM_PACKAGE_NAME_TO_UPPER}_FILE_NAME "${PACKAGE_AND_COMPONENT}-${VERSION_ETC}.rpm")
+    string(TOUPPER "${component_name}" CPACK_RPM_PACKAGE_NAME_UPPERCASE)
+    set(CPACK_RPM_${CPACK_RPM_PACKAGE_NAME_UPPERCASE}_FILE_NAME "${PACKAGE_AND_COMPONENT}-${VERSION_ETC}.rpm")
+    set(CPACK_DEBIAN_${CPACK_RPM_PACKAGE_NAME_UPPERCASE}_FILE_NAME "${PACKAGE_AND_COMPONENT}-${VERSION_ETC}.deb")
 
     unset(PACKAGE_AND_COMPONENT)
     unset(VERSION_ETC)
-    unset(CPACK_RPM_PACKAGE_NAME_TO_UPPER)
+    unset(CPACK_RPM_PACKAGE_NAME_UPPERCASE)
 
 endforeach()
 
