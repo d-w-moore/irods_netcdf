@@ -108,7 +108,6 @@ foreach (src ${api_modules_src})
         )
         if("${target}" STREQUAL "server")
             target_compile_definitions("${module_name}" PRIVATE RODS_SERVER)
-        else()
         endif()
     endforeach()
 endforeach()
@@ -282,13 +281,12 @@ set(CPACK_PACKAGE_FILE_NAME "irods-netcdf${IRODS_PLUGIN_PACKAGE_FILE_NAME_SUFFIX
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 set(CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 
-# -- dwm
-#set(CPACK_COMPONENTS_GROUPING IGNORE)
 
 set(CPACK_PACKAGE_VERSION ${IRODS_PLUGIN_VERSION})
 set(CPACK_PACKAGE_CONTACT "Renaissance Computing Institute <info@irods.org>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The integrated Rule-Oriented Data System")
 set(CPACK_PACKAGE_VENDOR "Renaissance Computing Institute <info@irods.org>")
+
 
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_PACKAGE_SECTION "contrib/science")
@@ -309,8 +307,8 @@ set(CPACK_RPM_PACKAGE_AUTOREQ 0)
 set(CPACK_RPM_PACKAGE_AUTOPROV 0)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_SOURCE_DIR}/packaging/postinst")
 
-set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 
+set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 
 
 set(CPACK_DEBIAN_PACKAGE_NAME "irods-netcdf")
@@ -334,8 +332,10 @@ elseif (IRODS_LINUX_DISTRIBUTION_NAME STREQUAL "opensuse")
   set(CPACK_RPM_PACKAGE_REQUIRES "${IRODS_PACKAGE_DEPENDENCIES_STRING}, irods-runtime = ${IRODS_VERSION}, libhdf5-103, libnetcdf15")
 endif()
 
+
 set (CPACK_RPM_SERVER_MODULES_PACKAGE_REQUIRES "irods_netcdf-client_modules")
 set (CPACK_RPM_ICOMMANDS_PACKAGE_REQUIRES "irods_netcdf-client_modules")
+
 
 include(CPack)
 
