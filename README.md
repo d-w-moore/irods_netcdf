@@ -37,4 +37,22 @@ Then:
 ```
 make
 ```
-As usual, the optional make target `package` may be supplied to produce an `.rpm` or `.deb` package.
+
+---
+
+## Packages
+
+Using the build command
+```
+make package
+```
+will produce the following package files (in .rpm or .deb format):
+   1. irods-netcdf-server_modules
+   2. irods-netcdf-client_modules
+   3. irods-netcdf-icommands
+
+Note:
+
+Dependencies are set such that both the server_modules and icommands packages depend on client_modules.
+The remaining prerequisites, ie. the openssl and netcdf libraries, can be installed via yum or apt-get via the
+default repositories.
