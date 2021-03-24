@@ -5,7 +5,7 @@ API plugins, microservices, and commands for accessing NetCDF data/metadata cont
 Currently supported version(s) of iRODS:
    - 4.2.8
 
-OS Distributions supported:
+OS Distributions presently supported:
    - Centos 7
    - Ubuntu 16.04
    - Ubuntu 18.04
